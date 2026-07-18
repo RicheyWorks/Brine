@@ -1,5 +1,9 @@
 # Brine
 
+[![CI](https://github.com/RicheyWorks/Brine/actions/workflows/ci.yml/badge.svg)](https://github.com/RicheyWorks/Brine/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Java 17](https://img.shields.io/badge/Java-17-orange.svg)](https://adoptium.net/)
+
 The sixth engine of the ecosystem: the **adaptive cache** — where things soak before they're
 needed. A read-through cache over [SmokeHouse](../SmokeHouse) whose eviction policy is not
 chosen but **evolved**: [CSRBT](../CSRBT)'s experimental cache-evolution loop (founders →
@@ -31,6 +35,26 @@ try (SmokeHouse<Long, Order> store = SmokeHouse.open(dir, opts);
 - **Caller-cadenced evolution.** Generations turn over every `windowOps` lookups on the
   caller's thread — no clock, no threads of Brine's own. Seeded: same seed + same traffic ⇒
   same champion lineage (tested).
+
+## Measured, not asserted
+
+`./gradlew jmh` runs `EvolvedVsFixedBenchmark`: the evolved engine (champion + shadow
+mirroring + generation turnover, overhead included) against a hand-wired fixed segmented LRU
+with identical read-through logic, and the no-cache floor — over a stable hot set (which
+prices the evolution overhead) and a shifting one (where adapting should pay). If evolution
+can't approach fixed on stable shapes or beat it on shifting ones, that verdict goes in
+CLAUDE.md honestly. `build` compiles the benchmarks, so the rig can't rot.
+
+## The ecosystem
+
+| Engine | Role |
+|---|---|
+| [CSRBT](https://github.com/RicheyWorks/CSRBT) | the adaptive ordered index |
+| [SuperBeefSort](https://github.com/RicheyWorks/SuperBeefSort) | the intake tract — profiles, sorts, feeds |
+| [SmokeHouse](https://github.com/RicheyWorks/SmokeHouse) | the log-structured store — tail, watchers, replicas |
+| [Carver](https://github.com/RicheyWorks/Carver) | the read planner — decides how to read |
+| [Renderer](https://github.com/RicheyWorks/Renderer) | the materialized-view engine over the tail |
+| **Brine** (this repo) | the adaptive cache with an evolved eviction policy |
 
 ## Build
 
