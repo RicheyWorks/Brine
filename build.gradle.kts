@@ -1,5 +1,6 @@
 plugins {
     `java-library`
+    alias(libs.plugins.jmh)   // measure phase: ./gradlew jmh (benchmarks in src/jmh/java)
 }
 
 group = "io.github.richeyworks"
@@ -34,3 +35,24 @@ tasks.test {
             "org.apache.logging.log4j.simple.SimpleLoggerContextFactory")
     systemProperty("org.apache.logging.log4j.simplelog.StatusLogger.level", "OFF")
 }
+
+// The measure rig: does evolution actually beat a fixed policy? (The transfer experiment's
+// production replication.) Run: ./gradlew jmh (results at build/reports/jmh/results.json)
+val jmhVer = libs.versions.jmh.asProvider().get()
+
+jmh {
+    jmhVersion = jmhVer
+    fork = 1
+    warmupIterations = 3
+    iterations = 5
+    resultFormat = "JSON"
+    resultsFile = layout.buildDirectory.file("reports/jmh/results.json")
+    jvmArgs.add("-Dlog4j2.loggerContextFactory="
+            + "org.apache.logging.log4j.simple.SimpleLoggerContextFactory")
+    jvmArgs.add("-Dorg.apache.logging.log4j.simplelog.StatusLogger.level=OFF")
+}
+
+// The jmh plugin doesn't hook the jmh source set into `build`/`check`, so a compile
+// break in a benchmark would only surface at the next manual jmh run. Feed it in.
+// (Mirrors every sibling.)
+tasks.named("check") { dependsOn(tasks.named("compileJmhJava")) }

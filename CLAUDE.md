@@ -30,8 +30,10 @@ terminal (PowerShell). Stale `.git/index.lock` fix: `Remove-Item .git\index.lock
   (`sameSeedSameTrafficSameChampionLineage` guards it).
 
 ## Roadmap seams (measure before cutting — the ring's rule)
-- JMH: hit-rate + latency vs a fixed-policy baseline (does evolution actually beat plain
-  segmented LRU on real shapes? — the transfer experiment's production replication).
+- The measure rig is live: `./gradlew jmh` runs `EvolvedVsFixedBenchmark` (evolved Brine vs
+  fixed segmented LRU vs no cache, STABLE_HOT vs SHIFTING_HOT). `build`/`check` compiles the
+  jmh source set. The claim to interrogate: evolution ≈ fixed on stable shapes (its overhead
+  is the price), evolution > fixed on shifting shapes (or the verdict goes here honestly).
 - Negative caching (remember misses) — only with a benchmark showing miss-storms matter.
 - `csrbt-experimental` publication: Brine is the consumer ADR-013 §4 was waiting for; firing
   the trigger is a release decision to make deliberately, not a side effect.
