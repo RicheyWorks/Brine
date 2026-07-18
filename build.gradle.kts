@@ -1,5 +1,6 @@
 plugins {
     `java-library`
+    `maven-publish`   // Phase 9: local repo today; Central rides csrbt-core's release
     alias(libs.plugins.jmh)   // measure phase: ./gradlew jmh (benchmarks in src/jmh/java)
 }
 
@@ -56,3 +57,34 @@ jmh {
 // break in a benchmark would only surface at the next manual jmh run. Feed it in.
 // (Mirrors every sibling.)
 tasks.named("check") { dependsOn(tasks.named("compileJmhJava")) }
+
+// Phase 9 (outer-ring ADR): make the ring locally installable — ./gradlew publishToMavenLocal.
+publishing {
+    publications {
+        create<MavenPublication>("maven") {
+            artifactId = "brine"
+            from(components["java"])
+            pom {
+                name = "Brine"
+                description = "An adaptive read-through cache whose eviction policy is evolved per workload — the sixth engine of the CSRBT ecosystem."
+                url = "https://github.com/RicheyWorks/Brine"
+                licenses {
+                    license {
+                        name = "MIT License"
+                        url = "https://opensource.org/licenses/MIT"
+                    }
+                }
+                developers {
+                    developer {
+                        id = "RicheyWorks"
+                        name = "Richmond"
+                    }
+                }
+                scm {
+                    url = "https://github.com/RicheyWorks/Brine"
+                    connection = "scm:git:https://github.com/RicheyWorks/Brine.git"
+                }
+            }
+        }
+    }
+}
