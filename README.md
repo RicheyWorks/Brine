@@ -56,6 +56,8 @@ CLAUDE.md honestly. `build` compiles the benchmarks, so the rig can't rot.
 | [Renderer](https://github.com/RicheyWorks/Renderer) | the materialized-view engine over the tail |
 | **Brine** (this repo) | the adaptive cache with an evolved eviction policy |
 
+Engines 7–11: [PitBoss](https://github.com/RicheyWorks/PitBoss) (fleet conductor) · [DryAge](https://github.com/RicheyWorks/DryAge) (time travel) · [Twine](https://github.com/RicheyWorks/Twine) (atomic batches) · [SmokeSignal](https://github.com/RicheyWorks/SmokeSignal) (the wire) · [Jerky](https://github.com/RicheyWorks/Jerky) (cold archives).
+
 ## Build
 
 ```bash
