@@ -58,6 +58,7 @@ CLAUDE.md honestly. `build` compiles the benchmarks, so the rig can't rot.
 
 Engines 7–11: [PitBoss](https://github.com/RicheyWorks/PitBoss) (fleet conductor) · [DryAge](https://github.com/RicheyWorks/DryAge) (time travel) · [Twine](https://github.com/RicheyWorks/Twine) (atomic batches) · [SmokeSignal](https://github.com/RicheyWorks/SmokeSignal) (the wire) · [Jerky](https://github.com/RicheyWorks/Jerky) (cold archives).
 Engine 12: [WholeHog](https://github.com/RicheyWorks/WholeHog) — the integration organism: all of them, composed and asserted together.
+Engines 13–14 (2026-08-19): [Rub](https://github.com/RicheyWorks/Rub) (observability — the tail watcher promoted to an organ) · [Sizzle](https://github.com/RicheyWorks/Sizzle) (chaos — deterministic fault injection at the write seam).
 
 ## Build
 
