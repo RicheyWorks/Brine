@@ -19,11 +19,11 @@ tasks.withType<JavaCompile>().configureEach {
 
 dependencies {
     // Resolved to the live sibling sources via the composite build in settings.gradle.kts.
-    api("io.github.richeyworks:smokehouse:0.1.0")
+    api("io.github.richeyworks:smokehouse:0.2.0")
     // The evolution machinery — this dependency IS the point: Brine is csrbt-experimental's
     // first external consumer, the publication trigger ADR-013 §4 has been holding for.
     // CacheGenome appears in Brine's public surface (champion()), so it is `api`.
-    api("io.github.richeyworks:csrbt-experimental:0.1.0")
+    api("io.github.richeyworks:csrbt-experimental:0.3.0")
 
     testImplementation(platform(libs.junit.bom))
     testImplementation(libs.junit.jupiter)
