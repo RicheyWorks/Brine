@@ -4,16 +4,42 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Java 17](https://img.shields.io/badge/Java-17-orange.svg)](https://adoptium.net/)
 
+**A read-through cache over SmokeHouse that evolves its eviction policy from the access workload.**
+
+[Quickstart](#quickstart) · [API example](#api-example) · [Design & scope](#design-notes) · [Build](#build) · [Ecosystem](#the-ecosystem)
+
+| Project | At a glance |
+| --- | --- |
+| Stage | Implemented Java library · source version `0.1.0` |
+| Setup | Java 17+ · bundled Gradle 9.5.1 · sibling composite builds |
+| Scope | Tail invalidation is asynchronous; a detected gap clears cached values. |
+| Code | [Implementation](src/main/java/io/github/richeyworks/brine/Brine.java) · [Tests](src/test/java/) |
+
 > **New here — or not a coder?** Start with the [plain-English guide to the whole ecosystem →](https://github.com/RicheyWorks/WholeHog/blob/main/ECOSYSTEM.md): what all of this is, what you'd actually use it for, and how to get it running even if you've never written a line of code.
 
 The sixth engine of the ecosystem: the **adaptive cache** — where things soak before they're
-needed. A read-through cache over [SmokeHouse](../SmokeHouse) whose eviction policy is not
-chosen but **evolved**: [CSRBT](../CSRBT)'s experimental cache-evolution loop (founders →
+needed. A read-through cache over [SmokeHouse](https://github.com/RicheyWorks/SmokeHouse) whose eviction policy is not
+chosen but **evolved**: [CSRBT](https://github.com/RicheyWorks/CSRBT)'s experimental cache-evolution loop (founders →
 shadow trials → viability gate → (μ+λ) selection → gated promotion) runs against the live
 access pattern, and Brine serves values out of whatever champion currently holds the throne.
 
-This is `csrbt-experimental`'s first production consumer — the publication trigger ADR-013 §4
-has been holding for.
+Brine consumes `csrbt-experimental` through the sibling composite build. The publication
+trigger is recorded in ADR-013 §4.
+
+## Quickstart
+
+With Git and Java 17+ installed, run this from an empty parent folder in PowerShell. Keep the repositories side by side: the build resolves them from source.
+
+```powershell
+'CSRBT','SmokeHouse','SuperBeefSort','Brine' |
+  ForEach-Object { git clone "https://github.com/RicheyWorks/$_.git" }
+Set-Location Brine
+.\gradlew.bat test
+```
+
+The bundled wrapper downloads Gradle and the build resolves dependencies on the first run. This command runs Brine's tests; see [Build](#build) for the full build and the existing Bash command.
+
+## API example
 
 ```java
 try (SmokeHouse<Long, Order> store = SmokeHouse.open(dir, opts);
