@@ -17,22 +17,39 @@ jobs:
         with:
           path: Brine
 
+      # The sibling repositories are private, and the token a workflow is given can read
+      # only its own repository. This step gets a short-lived, read-only token for exactly
+      # the siblings checked out below, from the "RicheyWorks Java Composite CI" GitHub App
+      # (its private key is the repository secret COMPOSITE_CI_PRIVATE_KEY).
+      - name: Token for the private sibling repositories
+        id: siblings
+        uses: actions/create-github-app-token@v3
+        with:
+          client-id: Iv23lizKGwyp1EXRPJlY
+          private-key: ${{ secrets.COMPOSITE_CI_PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
+          repositories: SmokeHouse,SuperBeefSort,CSRBT
+          permission-contents: read
+
       - name: Check out SmokeHouse (sibling, for the composite build)
         uses: actions/checkout@v4
         with:
           repository: RicheyWorks/SmokeHouse
+          token: ${{ steps.siblings.outputs.token }}
           path: SmokeHouse
 
       - name: Check out SuperBeefSort (sibling, nested composite)
         uses: actions/checkout@v4
         with:
           repository: RicheyWorks/SuperBeefSort
+          token: ${{ steps.siblings.outputs.token }}
           path: SuperBeefSort
 
       - name: Check out CSRBT (sibling, nested composite)
         uses: actions/checkout@v4
         with:
           repository: RicheyWorks/CSRBT
+          token: ${{ steps.siblings.outputs.token }}
           path: CSRBT
 
       - name: Set up JDK 17
