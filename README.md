@@ -6,6 +6,8 @@
 
 **A read-through cache over SmokeHouse that evolves its eviction policy from the access workload.**
 
+<p align="center"><img src="docs/images/evolved-cache.svg" width="900" alt="Brine: a get is served from memory if the champion holds the key, otherwise read from SmokeHouse; the evolution loop runs founders, shadow trials, a viability gate and (mu+lambda) selection; the SmokeHouse tail invalidates on every commit."></p>
+
 [Quickstart](#quickstart) · [API example](#api-example) · [Design & scope](#design-notes) · [Build](#build) · [Ecosystem](#the-ecosystem)
 
 | Project | At a glance |
